@@ -40,6 +40,7 @@ $(function ()
 
 /// some buttons for testing the demo
 
+<<<<<<< HEAD
 
 
 var redBtt = document.createElement("button");
