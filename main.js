@@ -29,13 +29,15 @@ $(document).ready(function () {
             $('.image-slide').css({"position": "relative", "top": "0", "transition": "top .2s ease-in-out"});
             $('.imageslide').css({"overflow": "hidden", "height": img_height});
 
-            var niggaFlip = false;
+            var flip = false;
 
             $('.image-slide').hover(function(){
-                var target = (niggaFlip) ? 0 : -new_top;
+                var target = (flip) ? 0 : -new_top;
                 $('.image-slide').css({"top": target});
-                niggaFlip = !niggaFlip;
+                flip = !flip;
             });
+
+            document.getElementById("canvas").remove();
         }
     };
 
