@@ -1,20 +1,13 @@
 $(function () 
 {
-        /*function tintImage(imgElement,tintColor) {
-        // create hidden canvas (using image dimensions)
-        var canvas = document.createElement("canvas");
-        canvas.width = imgElement.offsetWidth;
-        canvas.height = imgElement.offsetHeight;
-
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(imgElement,0,0);
-
-        var map = ctx.getImageData(0,0,320,240);
+    function tintImage(imgElement,tintColor) 
+    {
+        /*var map = context.getImageData(0,0,320,240);        
         var imdata = map.data;
 
-        // convert image to grayscale
         var r,g,b,avg;
-        for(var p = 0, len = imdata.length; p < len; p+=4) {
+        for(var p = 0, len = imdata.length; p < len; p+=4) 
+        {
             r = imdata[p]
             g = imdata[p+1];
             b = imdata[p+2];
@@ -24,46 +17,17 @@ $(function ()
             imdata[p] = imdata[p+1] = imdata[p+2] = avg;
         }
 
-        ctx.putImageData(map,0,0);
+        context.putImageData(map,0,0);*/
 
         // overlay filled rectangle using lighter composition
-        ctx.globalCompositeOperation = "lighter";
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle=tintColor;
-        ctx.fillRect(0,0,canvas.width,canvas.height);
 
         // replace image source with canvas data
         imgElement.src = canvas.toDataURL();
-    }
-
-
-
-/// some buttons for testing the demo
-
-<<<<<<< HEAD
-
-
-var redBtt = document.createElement("button");
-redBtt.appendChild(document.createTextNode("Red"));
-redBtt.onclick = function() {
- tintImage(
-        document.getElementById('myImage'),
-        "#550000" 
- );      
-}
-document.body.appendChild(redBtt);
-
-var bluBtt = document.createElement("button");
-bluBtt.appendChild(document.createTextNode("Blue"));
-bluBtt.onclick = function() {
- tintImage(
-        document.getElementById('myImage'),
-        "#000055" 
- );      
-}
-document.body.appendChild(bluBtt);*/
+    }   
     
-    $.fn.imageSlide = function(image1, image2, orientation)
+    
+    //Verificar se color tem # e mais ou igual a 3 letras/numeros
+    $.fn.imageSlide = function(image1, image2, orientation, tintColor)
     {
         if(orientation == null)
         {
@@ -113,11 +77,36 @@ document.body.appendChild(bluBtt);*/
                         new_pos = img_height;
                         
                         context.drawImage(img_02, 0, img_height, img_width, img_height);//img, x, y, w, h
+                        
+                        var map = context.getImageData(0, img_height, img_width, img_height);        
+                        var imgdata = map.data;
+                        var r,g,b,avg;
+                        
+                        for(var p = 0, len = imgdata.length; p < len; p+=4) 
+                        {
+                            r = imgdata[p]
+                            g = imgdata[p+1];
+                            b = imgdata[p+2];
+
+                            avg = Math.floor((r+g+b)/3);
+
+                            imgdata[p] = imgdata[p+1] = imgdata[p+2] = avg;
+                        }
+
+                        context.putImageData(map, 0, img_height);
+                        
+                        context.globalCompositeOperation = "lighter";
+                        context.globalAlpha = 1;
+                        context.fillStyle = tintColor;
+                        context.fillRect(0, img_height, img_width, img_height);
+                        
                         var img = canvas.toDataURL("image/png");
                         document.getElementById("imageslide").innerHTML +='<img src="' + img + '" class="image-slide"/>';
 
                         $('.image-slide').css({"position": "relative", "top": "0", "transition": "top .2s ease-in-out"});
                         $('.imageslide').css({"overflow": "hidden", "height": img_height, "display": "inline-block"});
+                        
+                        
 
                         var slide = false;
 
@@ -134,6 +123,29 @@ document.body.appendChild(bluBtt);*/
                         new_pos = img_width;
                         
                         context.drawImage(img_02, img_width, 0, img_width, img_height);//img, x, y, w, h
+                        
+                        var map = context.getImageData(img_width, 0, img_width, img_height);        
+                        var imgdata = map.data;
+                        var r,g,b,avg;
+                        
+                        for(var p = 0, len = imgdata.length; p < len; p+=4) 
+                        {
+                            r = imgdata[p]
+                            g = imgdata[p+1];
+                            b = imgdata[p+2];
+
+                            avg = Math.floor((r+g+b)/3);
+
+                            imgdata[p] = imgdata[p+1] = imgdata[p+2] = avg;
+                        }
+
+                        context.putImageData(map, img_width, 0);
+                        
+                        context.globalCompositeOperation = "lighter";
+                        context.globalAlpha = 1;
+                        context.fillStyle = tintColor;
+                        context.fillRect(img_width, 0, img_width, img_height);
+                        
                         var img = canvas.toDataURL("image/png");
                         document.getElementById("imageslide").innerHTML +='<img src="' + img + '" class="image-slide"/>';
 
@@ -149,7 +161,6 @@ document.body.appendChild(bluBtt);*/
                             slide = !slide;
                         });
                     }
-                    console.log(new_pos);
                 };
             };
 
@@ -157,5 +168,5 @@ document.body.appendChild(bluBtt);*/
         });
     }
     
-    $('#imageslide.imageslide').imageSlide('1.png', '2.png', 'vertical');
+    $('#imageslide.imageslide').imageSlide('1.png', '2.png', 'vertical', '#000');
 });
